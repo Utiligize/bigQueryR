@@ -34,7 +34,6 @@
 bqr_query <- function(projectId = bqr_get_global_project(), 
                       datasetId = bqr_get_global_dataset(), 
                       query, 
-                      labels = list(),
                       maxResults = 1000, 
                       useLegacySql = TRUE, 
                       useQueryCache = TRUE,
@@ -42,6 +41,8 @@ bqr_query <- function(projectId = bqr_get_global_project(),
                       timeoutMs = 600*1000){
   check_bq_auth()
   
+  labels <- check_labels(getOption("bigQueryR.labels"))
+
   if(endsWith(query, ".sql")){
     query <- readChar(query, nchars = file.info(query)$size)
   }
@@ -206,7 +207,6 @@ bqr_query <- function(projectId = bqr_get_global_project(),
 bqr_query_asynch <- function(projectId = bqr_get_global_project(), 
                              datasetId = bqr_get_global_dataset(), 
                              query, 
-                             labels = list(),
                              destinationTableId,
                              useLegacySql = TRUE,
                              writeDisposition = c("WRITE_EMPTY",
@@ -215,6 +215,8 @@ bqr_query_asynch <- function(projectId = bqr_get_global_project(),
   
   writeDisposition <- match.arg(writeDisposition)
   
+  labels <- check_labels(getOption("bigQueryR.labels"))
+
   check_bq_auth()
   ## make job
   job <- 

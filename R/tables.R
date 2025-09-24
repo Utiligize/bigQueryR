@@ -27,6 +27,8 @@ bqr_copy_table <- function(source_tableid,
   
   createDisposition <- match.arg(createDisposition)
   writeDisposition <- match.arg(writeDisposition)
+
+  labels <- check_labels(getOption("bigQueryR.labels"))
   
   assert_that(
     is.string(source_projectid),
@@ -52,7 +54,8 @@ bqr_copy_table <- function(source_tableid,
           tableId = destination_tableid
         ),
         writeDisposition = writeDisposition
-      )
+      ),
+      labels = labels
     )
   )
   
@@ -413,7 +416,6 @@ Table <- function(tableId,
                   encryptionConfiguration = NULL, 
                   expirationTime = NULL, 
                   friendlyName = NULL, 
-                  labels = NULL, 
                   materializedView = NULL, 
                   rangePartitioning = NULL, 
                   requirePartitionFilter = NULL, 
@@ -431,6 +433,8 @@ Table <- function(tableId,
     # is.flag(requirePartitionFilter)
   )
   
+  labels <- check_labels(getOption("bigQueryR.labels"))
+
   tt <- list(
     tableReference = list(projectId = projectId,
                           datasetId = datasetId,
