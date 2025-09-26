@@ -416,6 +416,7 @@ Table <- function(tableId,
                   encryptionConfiguration = NULL, 
                   expirationTime = NULL, 
                   friendlyName = NULL, 
+                  labels = NULL,
                   materializedView = NULL, 
                   rangePartitioning = NULL, 
                   requirePartitionFilter = NULL, 
@@ -433,7 +434,7 @@ Table <- function(tableId,
     # is.flag(requirePartitionFilter)
   )
   
-  labels <- check_labels(getOption("bigQueryR.labels"))
+  labels <- if (!is.null(labels)) check_labels(labels) else check_labels(getOption("bigQueryR.labels"))
 
   tt <- list(
     tableReference = list(projectId = projectId,
