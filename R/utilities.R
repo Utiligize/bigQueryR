@@ -146,24 +146,36 @@ idempotency <- function(){
 #' @keywords internal
 #' @noRd
 check_labels <- function(labels) {
+  # Return NULL if no labels provided (empty or NULL)
+  if (is.null(labels) || length(labels) == 0) {
+    return(NULL)
+  }
+
+  # Check if labels is a list
   if (!is.list(labels)) {
     warning(paste0("Labels need to be a dictionary list - setting labels to list()"), immediate. = TRUE)
     return(NULL)
   }
+
+  # Validate each label
   for (nm in names(labels)) {
+    # Check if label value is a single string
     if (!is.character(labels[[nm]]) || length(labels[[nm]]) != 1) {
       warning(sprintf("Label '%s' must be a single string type - setting labels to list()", nm), immediate. = TRUE)
       return(NULL)
     }
+    # Check if label key is lowercase
     if (nm != tolower(nm)) {
       warning(sprintf("Label key '%s' must be lowercase - setting labels to list()", nm), immediate. = TRUE)
       return(NULL)
     }
+    # Check if label value is lowercase
     if (labels[[nm]] != tolower(labels[[nm]])) {
       warning(sprintf("Label value '%s' must be lowercase - setting labels to list()", labels[[nm]]), immediate. = TRUE)
       return(NULL)
     }
   }
 
+  # Return valid labels
   return(labels)
 }
